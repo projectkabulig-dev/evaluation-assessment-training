@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>End-of-Day Evaluation | SDO Romblon</title>
+<style>
+:root{--navy:#0E2747;--navy2:#17375F;--paper:#F6F5F0;--gold:#F2B63D;--blue:#1F5FA6;--coral:#C73E1D;--teal:#17776E;--line:#CAD3DD;--muted:#5B6A7E}
+*{box-sizing:border-box}body{margin:0;font-family:'Segoe UI',system-ui,Arial,sans-serif;background:var(--paper);color:var(--navy);line-height:1.5}
+header{background:linear-gradient(135deg,var(--navy),var(--navy2));color:#fff;padding:22px 20px}
+header .in,main{max-width:760px;margin:auto}header small{color:var(--gold);letter-spacing:.12em;font-weight:700;font-size:12px}header h1{margin:4px 0 0;font-size:24px}
+main{padding:18px}.card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:22px;margin-bottom:16px;box-shadow:0 2px 10px rgba(14,39,71,.06);animation:in .3s ease}
+@keyframes in{from{opacity:0;transform:translateX(24px)}to{opacity:1;transform:none}}
+h2{margin:0 0 6px;font-size:21px}.sub{color:var(--muted);font-size:14px;margin:0 0 14px}
+.pill{display:inline-block;background:var(--gold);color:var(--navy);font-weight:700;border-radius:99px;padding:3px 12px;font-size:13px}
+ol.steps{padding-left:20px;margin:8px 0}ol.steps li{margin:8px 0}
+label{display:block;font-weight:600;font-size:14px;margin:12px 0 4px}
+select,input,textarea{width:100%;padding:11px 12px;border:1.5px solid var(--line);border-radius:10px;font-size:16px;font-family:inherit}
+textarea{min-height:84px;resize:vertical}select:focus,input:focus,textarea:focus{outline:none;border-color:var(--blue)}
+button{background:var(--navy);color:#fff;border:0;border-radius:12px;padding:13px 22px;font-size:16px;font-weight:700;cursor:pointer;font-family:inherit}
+button:hover{background:var(--blue)}button.alt{background:#fff;color:var(--navy);border:1.5px solid var(--navy)}button:disabled{opacity:.5;cursor:not-allowed}
+.nav{display:flex;gap:12px;justify-content:space-between;margin-top:14px}.hide{display:none}
+.bar{height:8px;background:#E7ECF1;border-radius:9px;overflow:hidden;margin:0 0 16px}.bar div{height:100%;background:var(--teal);width:0;transition:width .3s}
+.legend{display:grid;grid-template-columns:repeat(5,1fr);gap:4px;text-align:center;font-size:12px;color:var(--muted);margin-bottom:6px}.legend b{display:block;font-size:22px}
+.it{padding:14px 0;border-top:1px solid #EEF1F5}.it:first-of-type{border-top:0}.it p{margin:0 0 8px;font-weight:600}
+.sc{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+.sc button{background:#fff;border:1.5px solid var(--line);border-radius:12px;padding:8px 0;font-size:26px;color:inherit;line-height:1.1}
+.sc button small{display:block;font-size:11px;color:var(--muted);font-weight:600;margin-top:2px}
+.sc button.on{border-color:var(--blue);background:#EAF2FB;box-shadow:0 0 0 2px var(--blue) inset}
+.msg{font-size:14px;color:var(--coral);margin-top:10px;min-height:18px}
+.dots{display:flex;justify-content:center;gap:8px;margin:4px 0 20px}.dots i{width:9px;height:9px;border-radius:50%;background:var(--line)}.dots i.on{background:var(--navy);width:26px;border-radius:6px}
+.big{font-size:64px;text-align:center}
+</style></head><body>
+<header><div class="in"><small>SDO ROMBLON · CURRICULUM IMPLEMENTATION DIVISION</small><h1>End-of-Day Evaluation</h1></div></header>
+<main>
+<div class="bar"><div id="pb"></div></div>
+
+<section id="p0" class="card"><span class="pill">START HERE · INSTRUCTIONS</span>
+ <h2 style="margin-top:12px">Before you begin</h2>
+ <ol class="steps">
+  <li>This takes about <b>3 minutes</b>. Your answers are <b>anonymous</b>.</li>
+  <li>Tap one symbol for each statement. Left is the lowest rating and right is the highest.</li>
+  <li>You will rate the <b>facilitator</b>, the <b>topic</b>, the <b>venue</b>, the <b>food</b> and the <b>organization</b>.</li>
+  <li>The last page has short comments. They are optional, but they help us improve.</li>
+  <li>Swipe left or press Next to move forward.</li></ol>
+ <div class="legend" style="margin-top:12px"><div><b>🐌</b>Poor</div><div><b>🐢</b>Fair</div><div><b>🐕</b>Good</div><div><b>🐎</b>Very good</div><div><b>🦅</b>Excellent</div></div>
+ <label>Which day are you evaluating?</label><select id="day"><option value="">Select…</option><option>Day 1 (Nov 16)</option><option>Day 2 (Nov 17)</option></select>
+ <label>Your district (optional)</label><select id="district"><option value="">Select district…</option></select>
+ <div class="msg" id="e0"></div><div class="nav"><span></span><button id="n0">Next →</button></div></section>
+
+<div id="pages"></div>
+<section id="done" class="card hide" style="text-align:center"><div class="big">🦅</div><h2>Thank you!</h2><p class="sub" id="doneMsg">Your evaluation was submitted.</p></section>
+<div class="dots" id="dots"></div>
+</main>
+<script>
+// ===== SETTINGS =====
+const ENDPOINT="https://script.google.com/macros/s/AKfycbx8HwE2Jwr5WdIsdvu2YWxvpXdx5Ip8jAq4-UH-tn9kX5qLE9jR_WT9t6mFL6p9yShNmw/exec";
+const DISTRICTS=["Alcantara","Banton","Cajidiocan-Magdiwang","Concepcion","Corcuera","Looc","Odiongan North","Odiongan South","Romblon","San Agustin-Santa Maria-Calatrava","San Andres","San Fernando","San Jose-Santa Fe","Division Office / Other"];
+const FACE=[["🐌","Poor"],["🐢","Fair"],["🐕","Good"],["🐎","Very good"],["🦅","Excellent"]];
+const SECTIONS=[
+ {t:"The Facilitator",s:"How was the facilitator today?",items:[["F1","Knows the topic very well"],["F2","Explains clearly and simply"],["F3","Keeps participants involved"],["F4","Manages time well"],["F5","Answers questions helpfully"]]},
+ {t:"The Topic",s:"How was today's content?",items:[["T1","Relevant to my work"],["T2","Clear and easy to follow"],["T3","I can use it in my work"],["T4","Enough examples and hands-on practice"]]},
+ {t:"Venue and Food",s:"Rate the place and the meals.",items:[["V1","Room is comfortable"],["V2","Sound and screen are clear"],["V3","Venue is clean"],["V4","Internet and power are reliable"],["D1","Food tastes good"],["D2","Food is enough"],["D3","Meals served on time"],["D4","Food is clean and well handled"]]},
+ {t:"Organization",s:"How was the event run?",items:[["O1","Registration and materials are ready"],["O2","The schedule was followed"],["X1","Overall rating for today"]]}
+];
+const $=id=>document.getElementById(id);const ans={};
+const dsel=$("district");DISTRICTS.forEach(d=>{const o=document.createElement("option");o.textContent=o.value=d;dsel.appendChild(o)});
+// default day by date
+(()=>{const d=new Date();const s=d.toISOString().slice(0,10);if(s==="2026-11-16")$("day").selectedIndex=1;if(s==="2026-11-17")$("day").selectedIndex=2})();
+const pages=$("pages");
+SECTIONS.forEach((sec,i)=>{const e=document.createElement("section");e.className="card hide";e.id="p"+(i+1);
+ e.innerHTML=`<h2>${sec.t}</h2><p class="sub">${sec.s}</p><div class="legend">${FACE.map(f=>`<div><b>${f[0]}</b>${f[1]}</div>`).join("")}</div>`+
+ sec.items.map(it=>`<div class="it"><p>${it[1]}</p><div class="sc" data-k="${it[0]}">${FACE.map((f,k)=>`<button type="button" data-v="${k+1}">${f[0]}<small>${k+1}</small></button>`).join("")}</div></div>`).join("")+
+ `<div class="msg" id="e${i+1}"></div><div class="nav"><button class="alt" data-b="${i+1}">← Back</button><button data-n="${i+1}">Next →</button></div>`;
+ pages.appendChild(e)});
+const last=document.createElement("section");last.className="card hide";last.id="p5";
+last.innerHTML=`<h2>Your thoughts</h2><p class="sub">Optional, but very helpful.</p>
+<label>One word to describe today</label><input id="word" maxlength="30">
+<label>What was most useful today?</label><textarea id="best"></textarea>
+<label>What should we improve?</label><textarea id="improve"></textarea>
+<label>Other comments (facilitator, venue, food, etc.)</label><textarea id="comments"></textarea>
+<div class="msg" id="e5"></div><div class="nav"><button class="alt" data-b="5">← Back</button><button id="send">Submit evaluation</button></div>`;
+pages.appendChild(last);
+const total=6;let cur=0;
+$("dots").innerHTML=Array.from({length:total},()=>"<i></i>").join("");
+function show(n){cur=n;for(let i=0;i<total;i++){const e=$("p"+i);if(e)e.classList.toggle("hide",i!==n)}
+ document.querySelectorAll(".dots i").forEach((d,i)=>d.classList.toggle("on",i===n));$("pb").style.width=(n/(total-1)*100)+"%";window.scrollTo(0,0)}
+document.addEventListener("click",e=>{
+ const b=e.target.closest(".sc button");if(b){const g=b.parentElement;g.querySelectorAll("button").forEach(x=>x.classList.remove("on"));b.classList.add("on");ans[g.dataset.k]=+b.dataset.v;return}
+ const nx=e.target.closest("[data-n]");if(nx)next(+nx.dataset.n);const bk=e.target.closest("[data-b]");if(bk)show(+bk.dataset.b-1)});
+$("n0").onclick=()=>{if(!$("day").value){$("e0").textContent="Please choose which day you are evaluating.";return}$("e0").textContent="";show(1)};
+function next(i){const miss=SECTIONS[i-1].items.filter(it=>!ans[it[0]]).length;
+ if(miss){$("e"+i).textContent="Please rate all statements ("+miss+" left).";return}$("e"+i).textContent="";show(i+1)}
+// swipe
+(()=>{let x0=null,y0=null;document.addEventListener("touchstart",e=>{x0=e.touches[0].clientX;y0=e.touches[0].clientY},{passive:true});
+ document.addEventListener("touchend",e=>{if(x0===null)return;const dx=e.changedTouches[0].clientX-x0,dy=e.changedTouches[0].clientY-y0;x0=null;
+  if(Math.abs(dx)>70&&Math.abs(dx)>Math.abs(dy)*1.6&&cur<5){if(dx<0){if(cur===0)$("n0").click();else if(cur<5)next(cur)}else if(cur>0)show(cur-1)}},{passive:true})})();
+$("send").onclick=()=>{
+ const key="evaldone_"+$("day").value;
+ const rec={type:"eval",timestamp:new Date().toISOString(),day:$("day").value,district:$("district").value,...ans,word:$("word").value.trim(),best:$("best").value.trim(),improve:$("improve").value.trim(),comments:$("comments").value.trim()};
+ $("send").disabled=true;$("e5").textContent="Sending…";$("e5").style.color="var(--muted)";
+ fetch(ENDPOINT,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain"},body:JSON.stringify(rec)}).then(()=>{
+  $("p5").classList.add("hide");$("done").classList.remove("hide");$("dots").classList.add("hide");$("pb").style.width="100%";window.scrollTo(0,0)})
+ .catch(()=>{$("send").disabled=false;$("e5").style.color="var(--coral)";$("e5").textContent="Could not send. Check your internet and try again."})};
+show(0);
+</script></body></html>
