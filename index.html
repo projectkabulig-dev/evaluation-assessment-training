@@ -94,13 +94,16 @@ function next(i){const miss=SECTIONS[i-1].items.filter(it=>!ans[it[0]]).length;
 (()=>{let x0=null,y0=null;document.addEventListener("touchstart",e=>{x0=e.touches[0].clientX;y0=e.touches[0].clientY},{passive:true});
  document.addEventListener("touchend",e=>{if(x0===null)return;const dx=e.changedTouches[0].clientX-x0,dy=e.changedTouches[0].clientY-y0;x0=null;
   if(Math.abs(dx)>70&&Math.abs(dx)>Math.abs(dy)*1.6&&cur<5){if(dx<0){if(cur===0)$("n0").click();else if(cur<5)next(cur)}else if(cur>0)show(cur-1)}},{passive:true})})();
+function finish(){$("p5").classList.add("hide");$("done").classList.remove("hide");$("dots").classList.add("hide");$("pb").style.width="100%";window.scrollTo(0,0)}
 $("send").onclick=()=>{
  const key="evaldone_"+$("day").value;
  const rec={type:"eval",timestamp:new Date().toISOString(),day:$("day").value,district:$("district").value,...ans,word:$("word").value.trim(),best:$("best").value.trim(),improve:$("improve").value.trim(),comments:$("comments").value.trim()};
  $("send").disabled=true;$("e5").textContent="Sending…";$("e5").style.color="var(--muted)";
- fetch(ENDPOINT,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain"},body:JSON.stringify(rec)}).then(()=>{
-  $("p5").classList.add("hide");$("done").classList.remove("hide");$("dots").classList.add("hide");$("pb").style.width="100%";window.scrollTo(0,0)})
- .catch(()=>{$("send").disabled=false;$("e5").style.color="var(--coral)";$("e5").textContent="Could not send. Check your internet and try again."})};
+ fetch(ENDPOINT,{method:"POST",headers:{"Content-Type":"text/plain"},body:JSON.stringify(rec)})
+ .then(r=>r.text()).then(t=>{
+  if(t.trim()==="ok"){finish()}
+  else{$("send").disabled=false;$("e5").style.color="var(--coral)";$("e5").textContent="The server did not accept it ("+t.slice(0,60)+"). Please tell the facilitator."}})
+ .catch(()=>{$("send").disabled=false;$("e5").style.color="var(--coral)";$("e5").textContent="Could not confirm that it was sent. Check your internet and press Submit again."})};
 
 function goHome(){location.href=location.pathname}
 $("again").onclick=goHome;
