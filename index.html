@@ -6,6 +6,7 @@
 *{box-sizing:border-box}body{margin:0;font-family:'Segoe UI',system-ui,Arial,sans-serif;background:var(--paper);color:var(--navy);line-height:1.5}
 header{background:linear-gradient(135deg,var(--navy),var(--navy2));color:#fff;padding:22px 20px}
 header .in,main{max-width:760px;margin:auto}header small{color:var(--gold);letter-spacing:.12em;font-weight:700;font-size:12px}header h1{margin:4px 0 0;font-size:24px}
+.hd{display:flex;justify-content:space-between;align-items:center;gap:12px}.hi{background:rgba(255,255,255,.14);color:#fff;border:1px solid rgba(255,255,255,.3);border-radius:12px;width:46px;height:46px;padding:0;display:grid;place-items:center;flex:none}.hi:hover{background:rgba(255,255,255,.28)}
 main{padding:18px}.card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:22px;margin-bottom:16px;box-shadow:0 2px 10px rgba(14,39,71,.06);animation:in .3s ease}
 @keyframes in{from{opacity:0;transform:translateX(24px)}to{opacity:1;transform:none}}
 h2{margin:0 0 6px;font-size:21px}.sub{color:var(--muted);font-size:14px;margin:0 0 14px}
@@ -28,7 +29,8 @@ button:hover{background:var(--blue)}button.alt{background:#fff;color:var(--navy)
 .dots{display:flex;justify-content:center;gap:8px;margin:4px 0 20px}.dots i{width:9px;height:9px;border-radius:50%;background:var(--line)}.dots i.on{background:var(--navy);width:26px;border-radius:6px}
 .big{font-size:64px;text-align:center}
 </style></head><body>
-<header><div class="in"><small>SDO ROMBLON · CURRICULUM IMPLEMENTATION DIVISION</small><h1>End-of-Day Evaluation</h1></div></header>
+<header><div class="in hd"><div><small>SDO ROMBLON · CURRICULUM IMPLEMENTATION DIVISION</small><h1>End-of-Day Evaluation</h1></div>
+<button id="homeIcon" class="hi" aria-label="Back to start" title="Back to start"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h5v-6h4v6h5V10"/></svg></button></div></header>
 <main>
 <div class="bar"><div id="pb"></div></div>
 
@@ -46,7 +48,7 @@ button:hover{background:var(--blue)}button.alt{background:#fff;color:var(--navy)
  <div class="msg" id="e0"></div><div class="nav"><span></span><button id="n0">Next →</button></div></section>
 
 <div id="pages"></div>
-<section id="done" class="card hide" style="text-align:center"><div class="big">🦅</div><h2>Thank you!</h2><p class="sub" id="doneMsg">Your evaluation was submitted.</p></section>
+<section id="done" class="card hide" style="text-align:center"><div class="big">🦅</div><h2>Thank you!</h2><p class="sub" id="doneMsg">Your evaluation was submitted.</p><button id="again">Back to start</button></section>
 <div class="dots" id="dots"></div>
 </main>
 <script>
@@ -99,5 +101,9 @@ $("send").onclick=()=>{
  fetch(ENDPOINT,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain"},body:JSON.stringify(rec)}).then(()=>{
   $("p5").classList.add("hide");$("done").classList.remove("hide");$("dots").classList.add("hide");$("pb").style.width="100%";window.scrollTo(0,0)})
  .catch(()=>{$("send").disabled=false;$("e5").style.color="var(--coral)";$("e5").textContent="Could not send. Check your internet and try again."})};
+
+function goHome(){location.href=location.pathname}
+$("again").onclick=goHome;
+$("homeIcon").onclick=()=>{if(Object.keys(ans).length&&!$("done").classList.contains("hide")===false&&!confirm("Go back to the start? Your answers on this page will be lost."))return;goHome()};
 show(0);
 </script></body></html>
