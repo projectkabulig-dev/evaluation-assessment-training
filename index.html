@@ -29,7 +29,7 @@ button:hover{background:var(--blue)}button.alt{background:#fff;color:var(--navy)
 .dots{display:flex;justify-content:center;gap:8px;margin:4px 0 20px}.dots i{width:9px;height:9px;border-radius:50%;background:var(--line)}.dots i.on{background:var(--navy);width:26px;border-radius:6px}
 .big{font-size:64px;text-align:center}
 </style></head><body>
-<header><div class="in hd"><div><small>SDO ROMBLON · CURRICULUM IMPLEMENTATION DIVISION</small><h1>End-of-Day Evaluation</h1></div>
+<header><div class="in hd"><div><small>SDO ROMBLON · CURRICULUM IMPLEMENTATION DIVISION</small><h1>End-of-Day Evaluation</h1><div style="font-size:14px;color:#C9D6E8;margin-top:2px">November 19–20, 2026</div></div>
 <button id="homeIcon" class="hi" aria-label="Back to start" title="Back to start"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h5v-6h4v6h5V10"/></svg></button></div></header>
 <main>
 <div class="bar"><div id="pb"></div></div>
@@ -43,7 +43,7 @@ button:hover{background:var(--blue)}button.alt{background:#fff;color:var(--navy)
   <li>The last page has short comments. They are optional, but they help us improve.</li>
   <li>Swipe left or press Next to move forward.</li></ol>
  <div class="legend" style="margin-top:12px"><div><b>🐌</b>Poor</div><div><b>🐢</b>Fair</div><div><b>🐕</b>Good</div><div><b>🐎</b>Very good</div><div><b>🦅</b>Excellent</div></div>
- <label>Which day are you evaluating?</label><select id="day"><option value="">Select…</option><option>Day 1 (Nov 16)</option><option>Day 2 (Nov 17)</option></select>
+ <label>Which day are you evaluating?</label><select id="day"><option value="">Select…</option><option>Day 1 (Nov 16)</option><option>Day 2 (Nov 17)</option><option>Day 1 (Nov 19)</option><option>Day 2 (Nov 20)</option></select>
  <label>Your district (optional)</label><select id="district"><option value="">Select district…</option></select>
  <div class="msg" id="e0"></div><div class="nav"><span></span><button id="n0">Next →</button></div></section>
 
@@ -65,7 +65,7 @@ const SECTIONS=[
 const $=id=>document.getElementById(id);const ans={};
 const dsel=$("district");DISTRICTS.forEach(d=>{const o=document.createElement("option");o.textContent=o.value=d;dsel.appendChild(o)});
 // default day by date
-(()=>{const d=new Date();const s=d.toISOString().slice(0,10);if(s==="2026-11-16")$("day").selectedIndex=1;if(s==="2026-11-17")$("day").selectedIndex=2})();
+(()=>{const d=new Date();const s=d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");const m={"2026-11-16":1,"2026-11-17":2,"2026-11-19":3,"2026-11-20":4};if(m[s])$("day").selectedIndex=m[s]})();
 const pages=$("pages");
 SECTIONS.forEach((sec,i)=>{const e=document.createElement("section");e.className="card hide";e.id="p"+(i+1);
  e.innerHTML=`<h2>${sec.t}</h2><p class="sub">${sec.s}</p><div class="legend">${FACE.map(f=>`<div><b>${f[0]}</b>${f[1]}</div>`).join("")}</div>`+
